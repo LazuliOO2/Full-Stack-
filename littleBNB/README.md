@@ -132,7 +132,7 @@ npm run dev
 
 ## 🏗 Estrutura Geral
 
-    LittleBNB/
+ LittleBNB/
 │
 ├── back-end/
 │   ├── config/
@@ -201,6 +201,7 @@ npm run dev
 │   └── .gitignore
 │
 └── README.md
+
 
 ------------------------------------------------------------------------
 
