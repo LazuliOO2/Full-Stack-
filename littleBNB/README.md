@@ -132,28 +132,24 @@ npm run dev
 
 ## 🏗 Estrutura Geral
 
- LittleBNB/
+```text
+LittleBNB/
 │
 ├── back-end/
 │   ├── config/
 │   │   └── db.js
-│   │
 │   ├── domains/
 │   │   ├── bookings/
 │   │   │   ├── model.js
 │   │   │   └── routes.js
-│   │   │
 │   │   ├── places/
 │   │   │   ├── model.js
 │   │   │   └── routes.js
-│   │   │
 │   │   └── users/
 │   │       ├── model.js
 │   │       └── routes.js
-│   │
 │   ├── routes/
 │   │   └── index.js
-│   │
 │   ├── utils/
 │   ├── tmp/
 │   ├── .env
@@ -164,43 +160,10 @@ npm run dev
 │
 ├── front-end/
 │   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   │   ├── AccBookings.jsx
-│   │   │   ├── AccPlaces.jsx
-│   │   │   ├── AccProfile.jsx
-│   │   │   ├── Booking.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Item.jsx
-│   │   │   ├── NewPlace.jsx
-│   │   │   ├── Perk.jsx
-│   │   │   ├── Perks.jsx
-│   │   │   └── PhotoUploader.jsx
-│   │   │
-│   │   ├── contexts/
-│   │   │   └── UserContext.jsx
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── Account.jsx
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Place.jsx
-│   │   │   └── Register.jsx
-│   │   │
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx
-│   │
-│   ├── .env
-│   ├── eslint.config.js
-│   ├── index.html
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── tailwind.config.js
-│   ├── vite.config.js
-│   └── .gitignore
+│   ├── ...
 │
 └── README.md
+
 
 
 ------------------------------------------------------------------------
