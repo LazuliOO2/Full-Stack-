@@ -132,7 +132,8 @@ npm run dev
 
 ## 🏗 Estrutura Geral
 
-    LittleBNB/
+```text
+LittleBNB/
 │
 ├── back-end/
 │   ├── config/
@@ -165,6 +166,7 @@ npm run dev
 ├── front-end/
 │   ├── src/
 │   │   ├── assets/
+│   │   │
 │   │   ├── components/
 │   │   │   ├── AccBookings.jsx
 │   │   │   ├── AccPlaces.jsx
@@ -201,6 +203,10 @@ npm run dev
 │   └── .gitignore
 │
 └── README.md
+```
+
+
+
 
 ------------------------------------------------------------------------
 
