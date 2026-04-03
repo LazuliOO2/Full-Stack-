@@ -74,7 +74,7 @@ A API é dividida em:
 ## Backend (Laravel + Docker)
 
 ```bash
-cd teste/back-end
+cd back-end
 
 # 1. Copie o arquivo de configuração
 cp .env.example .env
@@ -119,7 +119,7 @@ http://localhost:8000
 
 ```bash
 Abra um novo terminal na raiz do projeto e acesse a pasta do front-end:
-cd teste/front-end
+cd front-end
 npm install
 npm run dev
 ```
