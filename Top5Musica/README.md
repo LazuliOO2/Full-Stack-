@@ -96,13 +96,13 @@ Depois execute:
 
 ```bash
 # 3. Suba os containers do Docker
-./vendor/bin/sail up -d
+wls ./vendor/bin/sail up -d
 
 # 4. Gere a chave da aplicação
-./vendor/bin/sail artisan key:generate
+wsl ./vendor/bin/sail artisan key:generate
 
 # 5. Rode as migrations e seeders
-./vendor/bin/sail artisan migrate --seed
+wsl ./vendor/bin/sail artisan migrate --seed
 ```
 
 API rodando em:
