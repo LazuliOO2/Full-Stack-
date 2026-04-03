@@ -11,27 +11,20 @@ class UserController extends Controller
     // Lista todos os usuários
     public function index(Request $request)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json(['message' => 'Acesso negado.'], 403);
-        }
         return response()->json(User::all());
     }
 
     // Promove ou rebaixa um usuário
     public function updateRole(Request $request, $id)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json(['message' => 'Acesso negado.'], 403);
-        }
-
         $user = User::findOrFail($id);
-        
+
         if ($user->id === $request->user()->id) {
             return response()->json(['message' => 'Você não pode alterar seus próprios privilégios.'], 400);
         }
 
         //  Atribuir a propriedade diretamente e salvar
-        $user->is_admin = !$user->is_admin;
+        $user->is_admin = ! $user->is_admin;
         $user->save();
 
         return response()->json(['message' => 'Privilégios atualizados com sucesso!']);
@@ -40,17 +33,14 @@ class UserController extends Controller
     // Exclui um usuário
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json(['message' => 'Acesso negado.'], 403);
-        }
-
         $user = User::findOrFail($id);
-        
+
         if ($user->id === $request->user()->id) {
             return response()->json(['message' => 'Você não pode excluir sua própria conta.'], 400);
         }
 
         $user->delete();
+
         return response()->json(['message' => 'Usuário excluído com sucesso!']);
     }
 }

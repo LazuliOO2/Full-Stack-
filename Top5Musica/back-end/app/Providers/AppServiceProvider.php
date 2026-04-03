@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -24,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureRateLimiting();
+        $this->configurePasswordResetUrls();
     }
 
     /**
@@ -46,5 +52,22 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+    }
+
+    protected function configureRateLimiting(): void
+    {
+        RateLimiter::for('song-views', function (Request $request) {
+            return Limit::perMinute(30)->by($request->ip());
+        });
+    }
+
+    protected function configurePasswordResetUrls(): void
+    {
+        ResetPassword::createUrlUsing(function (object $user, string $token): string {
+            $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
+            $email = urlencode($user->email);
+
+            return "{$frontendUrl}/reset-password?token={$token}&email={$email}";
+        });
     }
 }

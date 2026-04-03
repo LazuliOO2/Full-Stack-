@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Song;
+use App\Rules\YouTubeUrl;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
@@ -27,17 +28,14 @@ class SongController extends Controller
 
         return response()->json([
             'top5' => $top5,
-            'others' => $others
+            'others' => $others,
         ]);
     }
 
     public function store(Request $request)
     {
         // Valida os dados recebidos do React
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'youtube_link' => 'required|url'
-        ]);
+        $validated = $request->validate($this->songRules());
 
         // Cria a música no banco de dados
         // O status 'pending' deve estar definido por padrão no model ou migration
@@ -45,7 +43,7 @@ class SongController extends Controller
 
         return response()->json([
             'message' => 'Sugestão enviada com sucesso e aguardando aprovação!',
-            'song' => $song
+            'song' => $song,
         ], 201);
     }
 
@@ -59,39 +57,24 @@ class SongController extends Controller
     // Editar os dados da música (Título ou Link)
     public function update(Request $request, $id)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json([
-                'message' => 'Acesso negado. Apenas administradores.'
-            ], 403);
-        }
-
         $song = Song::findOrFail($id);
 
         // 'sometimes' indica que o campo só será validado se for enviado
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'youtube_link' => 'sometimes|required|url',
-        ]);
+        $validated = $request->validate($this->songRules(partial: true));
 
         $song->update($validated);
 
         return response()->json([
             'message' => 'Música editada com sucesso!',
-            'song' => $song
+            'song' => $song,
         ]);
     }
 
     public function updateStatus(Request $request, $id)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json([
-                'message' => 'Acesso negado. Apenas administradores.'
-            ], 403);
-        }
-
         // Valida se o status enviado é apenas approved ou rejected
         $validated = $request->validate([
-            'status' => 'required|in:approved,rejected'
+            'status' => 'required|in:approved,rejected',
         ]);
 
         // Busca a música pelo ID ou retorna 404
@@ -99,41 +82,29 @@ class SongController extends Controller
 
         // Atualiza o status
         $song->update([
-            'status' => $validated['status']
+            'status' => $validated['status'],
         ]);
 
         return response()->json([
             'message' => 'Status da música atualizado com sucesso!',
-            'song' => $song
+            'song' => $song,
         ]);
     }
 
     // Excluir a música do banco de dados
     public function destroy(Request $request, $id)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json([
-                'message' => 'Acesso negado. Apenas administradores.'
-            ], 403);
-        }
-
         $song = Song::findOrFail($id);
         $song->delete();
 
         return response()->json([
-            'message' => 'Música excluída com sucesso!'
+            'message' => 'Música excluída com sucesso!',
         ]);
     }
 
     // Lista TODAS as músicas (apenas para administrador)
     public function adminIndex(Request $request)
     {
-        if (!$request->user()->is_admin) {
-            return response()->json([
-                'message' => 'Acesso negado.'
-            ], 403);
-        }
-
         // Traz todas as músicas, das mais recentes para as mais antigas
         $songs = Song::orderBy('created_at', 'desc')->get();
 
@@ -147,7 +118,24 @@ class SongController extends Controller
 
         return response()->json([
             'message' => 'Visualização contabilizada!',
-            'views' => $song->views
+            'views' => $song->views,
         ]);
+    }
+
+    private function songRules(bool $partial = false): array
+    {
+        $rules = [
+            'title' => ['required', 'string', 'max:255'],
+            'youtube_link' => ['required', new YouTubeUrl],
+        ];
+
+        if (! $partial) {
+            return $rules;
+        }
+
+        return [
+            'title' => ['sometimes', ...$rules['title']],
+            'youtube_link' => ['sometimes', ...$rules['youtube_link']],
+        ];
     }
 }
