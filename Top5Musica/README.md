@@ -91,6 +91,15 @@ docker run --rm \
 ```
 docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
 ```
+
+# Observação
+
+Se a porta padrão do banco de dados estiver ocupada, você pode alterar no arquivo .env:
+```
+FORWARD_DB_PORT=3307
+```
+Substitua 3307 pela porta que desejar usar.
+
 Abra o PowerShell como administrador, navegue até a pasta do arquivo e depois execute o comando:
 
 ```bash
