@@ -1,3 +1,5 @@
+import { apiUrl } from '../lib/api';
+
 export default function RankingList({
   top5 = [],
   others,
@@ -8,7 +10,7 @@ export default function RankingList({
   const handleViewClick = async (id) => {
     try {
       // 1. Envia a requisição para o banco de dados somar +1 view
-      await fetch(`http://localhost:8000/api/songs/${id}/view`, {
+      await fetch(apiUrl(`/api/songs/${id}/view`), {
         method: "PATCH",
         headers: { Accept: "application/json" },
       });

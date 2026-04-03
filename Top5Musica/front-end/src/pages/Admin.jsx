@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { apiUrl } from '../lib/api';
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState('songs'); // Controla a aba ativa
@@ -10,21 +11,23 @@ export default function Admin() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const loggedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = loggedUser?.is_admin === true || loggedUser?.is_admin === 1;
+  const pendingSongsCount = songs.filter((song) => song.status === 'pending').length;
 
   // --- FUNÇÕES DE MÚSICAS ---
   const fetchAdminSongs = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/songs', {
+      const response = await fetch(apiUrl('/api/admin/songs'), {
         headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
       });
       if (response.ok) setSongs(await response.json());
-    } catch (err) {
+    } catch {
       setError('Erro ao buscar as músicas.');
     }
   };
 
   const updateSongStatus = async (id, newStatus) => {
-    await fetch(`http://localhost:8000/api/songs/${id}/status`, {
+    await fetch(apiUrl(`/api/songs/${id}/status`), {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +40,7 @@ export default function Admin() {
 
   const deleteSong = async (id) => {
     if (!window.confirm('Excluir esta música?')) return;
-    await fetch(`http://localhost:8000/api/songs/${id}`, {
+    await fetch(apiUrl(`/api/songs/${id}`), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -49,7 +52,7 @@ export default function Admin() {
     const newLink = window.prompt('Novo link:', currentLink);
     if (!newTitle || !newLink) return;
 
-    await fetch(`http://localhost:8000/api/songs/${id}`, {
+    await fetch(apiUrl(`/api/songs/${id}`), {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -63,18 +66,22 @@ export default function Admin() {
   // --- FUNÇÕES DE USUÁRIOS ---
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/users', {
+      const response = await fetch(apiUrl('/api/admin/users'), {
         headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
       });
       if (response.ok) setUsers(await response.json());
-    } catch (err) {
+    } catch {
       setError('Erro ao buscar usuários.');
     }
   };
 
+  const loadAdminData = useEffectEvent(async () => {
+    await Promise.all([fetchAdminSongs(), fetchUsers()]);
+  });
+
   const toggleAdminRole = async (id) => {
     if (!window.confirm('Alterar privilégios deste usuário?')) return;
-    await fetch(`http://localhost:8000/api/admin/users/${id}/role`, {
+    await fetch(apiUrl(`/api/admin/users/${id}/role`), {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
     });
@@ -83,7 +90,7 @@ export default function Admin() {
 
   const deleteUser = async (id) => {
     if (!window.confirm('Atenção! Deseja excluir este usuário do sistema?')) return;
-    await fetch(`http://localhost:8000/api/admin/users/${id}`, {
+    await fetch(apiUrl(`/api/admin/users/${id}`), {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
     });
@@ -92,13 +99,13 @@ export default function Admin() {
 
   // --- EFEITO INICIAL ---
   useEffect(() => {
-    if (!token || !loggedUser.is_admin) {
+    if (!token || !isAdmin) {
       navigate('/auth');
-    } else {
-      fetchAdminSongs();
-      fetchUsers();
+      return;
     }
-  }, [navigate, token, loggedUser.is_admin]);
+
+    void loadAdminData();
+  }, [isAdmin, navigate, token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -113,6 +120,11 @@ export default function Admin() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b pb-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-orange-900">Painel do Administrador</h1>
+            <p className="text-sm text-gray-600 mt-2">
+              {pendingSongsCount > 0
+                ? `${pendingSongsCount} sugest${pendingSongsCount > 1 ? 'ões pendentes aguardando revisão.' : 'ão pendente aguardando revisão.'}`
+                : 'Nenhuma sugestão pendente no momento.'}
+            </p>
             <Link to="/" className="text-sm text-blue-600 hover:underline mt-1 inline-block">
               &larr; Voltar para o Site Público
             </Link>
@@ -138,6 +150,13 @@ export default function Admin() {
             }`}
           >
             Gerenciar Músicas
+            {pendingSongsCount > 0 && (
+              <span className={`ml-2 inline-flex min-w-6 items-center justify-center rounded-full px-2 py-0.5 text-xs ${
+                activeTab === 'songs' ? 'bg-white text-[#8B4513]' : 'bg-orange-600 text-white'
+              }`}>
+                {pendingSongsCount}
+              </span>
+            )}
           </button>
           <button
             onClick={() => setActiveTab('users')}

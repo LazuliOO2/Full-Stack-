@@ -1,19 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
 import SuggestionForm from '../components/SuggestionForm';
 import RankingList from '../components/RankingList';
+import { apiUrl } from '../lib/api';
 
 export default function Home() {
   const [top5, setTop5] = useState([]);
   const [others, setOthers] = useState(null);
   
   // Criamos um estado para guardar os dados do usuário logado
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const isAdmin = user?.is_admin === true || user?.is_admin === 1;
 
   const fetchSongs = async (page = 1) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/songs?page=${page}`);
+      const response = await fetch(apiUrl(`/api/songs?page=${page}`));
       const data = await response.json();
       setTop5(data.top5);
       setOthers(data.others);
@@ -22,14 +28,12 @@ export default function Home() {
     }
   };
 
+  const loadInitialSongs = useEffectEvent(async () => {
+    await fetchSongs();
+  });
+
   useEffect(() => {
-    // Ao carregar a página, verifica se existe um usuário salvo no localStorage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    
-    fetchSongs();
+    void loadInitialSongs();
   }, []);
 
   // Função para limpar o login e atualizar a tela
@@ -53,7 +57,7 @@ export default function Home() {
               <span className="text-sm text-gray-600 font-medium">Olá, {user.name}</span>
               
               {/* Se for administrador, mostra o link para o painel */}
-              {user.is_admin === 1 && (
+              {isAdmin && (
                 <Link to="/admin" className="text-sm text-blue-600 hover:text-blue-800 font-semibold underline">
                   Painel Admin
                 </Link>

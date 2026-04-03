@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/vitest';
 import SuggestionForm from '../components/SuggestionForm';
 
 // Mock da função fetch do navegador
-global.fetch = vi.fn();
+globalThis.fetch = vi.fn();
 
 describe('SuggestionForm Component', () => {
   beforeEach(() => {
@@ -41,6 +41,40 @@ describe('SuggestionForm Component', () => {
     expect(
       screen.getByPlaceholderText(/Nome da Música/i)
     ).toBeInTheDocument();
+  });
+
+  it('exibe a prévia da thumbnail quando o link do YouTube é válido', () => {
+    render(
+      <MemoryRouter>
+        <SuggestionForm user={{ id: 1, name: 'Teste' }} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Cole aqui o link do YouTube/i), {
+      target: { value: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' }
+    });
+
+    const previewImage = screen.getByAltText(/Thumbnail do vídeo sugerido/i);
+
+    expect(previewImage).toBeInTheDocument();
+    expect(previewImage).toHaveAttribute('src', expect.stringContaining('dQw4w9WgXcQ'));
+  });
+
+  it('mostra feedback discreto quando o link informado não é do YouTube', () => {
+    render(
+      <MemoryRouter>
+        <SuggestionForm user={{ id: 1, name: 'Teste' }} />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText(/Cole aqui o link do YouTube/i), {
+      target: { value: 'https://example.com/video' }
+    });
+
+    expect(
+      screen.getByText(/Cole um link válido do YouTube para visualizar a prévia/i)
+    ).toBeInTheDocument();
+    expect(screen.queryByAltText(/Thumbnail do vídeo sugerido/i)).not.toBeInTheDocument();
   });
 
   it('exibe mensagem de sucesso ao enviar o formulário corretamente', async () => {

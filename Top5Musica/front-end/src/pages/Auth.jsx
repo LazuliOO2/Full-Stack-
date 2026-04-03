@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // <-- Adicionamos o Link aqui
+import { apiUrl } from '../lib/api';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,7 +18,7 @@ export default function Auth() {
     const payload = isLogin ? { email, password } : { name, email, password };
 
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(apiUrl(endpoint), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +41,7 @@ export default function Auth() {
       } else {
         setError(data.message || 'Erro na autenticação. Verifique os dados.');
       }
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor.');
     }
   };
@@ -109,6 +110,14 @@ export default function Auth() {
               required 
             />
           </div>
+
+          {isLogin && (
+            <div className="text-right">
+              <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                Esqueci minha senha
+              </Link>
+            </div>
+          )}
 
           <button 
             type="submit" 

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { apiUrl } from '../lib/api';
+import { extractYouTubeVideoId, getYouTubeThumbnailUrl } from '../lib/youtube';
 
 export default function SuggestionForm({ user }) {
   const [title, setTitle] = useState('');
@@ -7,6 +9,10 @@ export default function SuggestionForm({ user }) {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const videoId = extractYouTubeVideoId(link);
+  const hasTypedLink = link.trim().length > 0;
+  const showInvalidLinkFeedback = hasTypedLink && !videoId;
+  const previewThumbnailUrl = getYouTubeThumbnailUrl(videoId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +30,7 @@ export default function SuggestionForm({ user }) {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/songs', {
+      const response = await fetch(apiUrl('/api/songs'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +53,7 @@ export default function SuggestionForm({ user }) {
       } else {
         setError(data.message || 'Erro ao enviar a sugestão.');
       }
-    } catch (err) {
+    } catch {
       setError('Erro de conexão com o servidor.');
     } finally {
       setIsLoading(false);
@@ -101,6 +107,28 @@ export default function SuggestionForm({ user }) {
             {isLoading ? 'Enviando...' : 'Enviar Link'}
           </button>
         </div>
+
+        {showInvalidLinkFeedback && (
+          <p className="text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded">
+            Cole um link válido do YouTube para visualizar a prévia antes de enviar.
+          </p>
+        )}
+
+        {videoId && (
+          <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+            <div className="px-4 py-3 border-b border-gray-200">
+              <p className="text-sm font-semibold text-gray-700">Prévia do vídeo</p>
+              <p className="text-xs text-gray-500">Thumbnail gerada a partir do link informado.</p>
+            </div>
+            <div className="p-4">
+              <img
+                src={previewThumbnailUrl}
+                alt="Thumbnail do vídeo sugerido"
+                className="w-full rounded-md border border-gray-200 object-cover"
+              />
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
