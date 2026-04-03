@@ -91,18 +91,21 @@ docker run --rm \
 ```
 docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
 ```
-
-Depois execute:
+Abra o PowerShell como administrador, navegue até a pasta do arquivo e depois execute o comando:
 
 ```bash
+
+wsl
+
 # 3. Suba os containers do Docker
-wsl ./vendor/bin/sail up -d
+
+./vendor/bin/sail up -d
 
 # 4. Gere a chave da aplicação
-wsl ./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan key:generate
 
 # 5. Rode as migrations e seeders
-wsl ./vendor/bin/sail artisan migrate --seed
+./vendor/bin/sail artisan migrate --seed
 ```
 
 API rodando em:
