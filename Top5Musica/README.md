@@ -96,7 +96,7 @@ Depois execute:
 
 ```bash
 # 3. Suba os containers do Docker
-wls ./vendor/bin/sail up -d
+wsl ./vendor/bin/sail up -d
 
 # 4. Gere a chave da aplicação
 wsl ./vendor/bin/sail artisan key:generate
