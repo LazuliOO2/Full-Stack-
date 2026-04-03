@@ -91,14 +91,6 @@ docker run --rm \
 ```
 docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
 ```
-### ⚠️ Importante
-Antes de subir o Docker, abra o arquivo `.env` e configure:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=mysql
-APP_PORT=8000
-```
 
 Depois execute:
 
