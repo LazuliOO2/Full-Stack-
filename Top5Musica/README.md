@@ -128,13 +128,13 @@ http://localhost:5173
 
 ## Backend
 ```bash
-cd teste/back-end
+cd back-end
 ./vendor/bin/sail artisan test
 ```
 
 ## Frontend
 ```bash
-cd teste/front-end
+cd front-end
 npm run test
 ```
 
