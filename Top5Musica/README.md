@@ -80,7 +80,12 @@ cd teste/back-end
 cp .env.example .env
 
 # 2. Instale as dependências
-composer install
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
 ```
 
 ### ⚠️ Importante
