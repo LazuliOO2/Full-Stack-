@@ -92,13 +92,7 @@ docker run --rm \
 docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html laravelsail/php84-composer:latest composer install --ignore-platform-reqs
 ```
 
-# Observação
 
-Se a porta padrão do banco de dados estiver ocupada, você pode alterar no arquivo .env:
-```
-FORWARD_DB_PORT=3307
-```
-Substitua 3307 pela porta que desejar usar.
 
 Abra o PowerShell como administrador, navegue até a pasta do arquivo e depois execute o comando:
 
@@ -208,4 +202,7 @@ npm run test
 5. O projeto já possui testes automatizados no frontend e backend.
 6. **Credenciais de Teste (Geradas pelo Seeder):**
    - **Administrador:** Email: `admin@supliu.com.br` | Senha: `senha123`
+7. Caso a porta padrão do MySQL esteja em uso, altere no arquivo `.env`:
+   
+   FORWARD_DB_PORT=3307 Substitua 3307 pela porta que desejar usar.
 
