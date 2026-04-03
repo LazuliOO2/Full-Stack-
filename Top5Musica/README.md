@@ -118,6 +118,7 @@ http://localhost:8000
 ## Frontend (React)
 
 ```bash
+Abra um novo terminal na raiz do projeto e acesse a pasta do front-end:
 cd teste/front-end
 npm install
 npm run dev
