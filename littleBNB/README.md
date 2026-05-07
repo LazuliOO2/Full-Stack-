@@ -1,136 +1,246 @@
 # 🏠 LittleBNB
 
-> ⚠️ **STATUS DO PROJETO: EM MANUTENÇÃO / DESENVOLVIMENTO**
->
-> Este projeto é um clone funcional inspirado no Airbnb.\
-> As funcionalidades principais estão operando, porém o código está
-> passando por refatorações e novas features estão sendo implementadas.
+<p align="center">
+  Clone Full-Stack inspirado no Airbnb utilizando MERN Stack.
+</p>
 
-------------------------------------------------------------------------
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange">
+  <img src="https://img.shields.io/badge/Node.js-Backend-green">
+  <img src="https://img.shields.io/badge/React-Frontend-blue">
+  <img src="https://img.shields.io/badge/MongoDB-Database-brightgreen">
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey">
+</p>
 
-## 📖 Sobre o Projeto
+---
 
-O **LittleBNB** é uma aplicação Full-Stack desenvolvida com o objetivo
-de replicar as principais funcionalidades da plataforma Airbnb.
+# 📖 Sobre o Projeto
+
+O **LittleBNB** é uma aplicação Full-Stack inspirada na plataforma Airbnb, desenvolvida com foco em:
+
+- Arquitetura escalável
+- Organização modular
+- Segurança de APIs
+- Testes de carga
+- Boas práticas de desenvolvimento Full-Stack
 
 A aplicação permite que usuários:
 
--   Criem uma conta
--   Façam login
--   Visualizem acomodações
--   Gerenciem seu perfil
+- Criem contas
+- Realizem autenticação
+- Visualizem acomodações
+- Gerenciem perfil
+- Criem reservas
 
-O projeto foi construído como prática de arquitetura Full-Stack
-utilizando a stack MERN.
+O projeto foi desenvolvido como prática profissional utilizando a stack **MERN**.
 
-------------------------------------------------------------------------
+---
 
-## 🚀 Tecnologias Utilizadas
+# 🚀 Tecnologias Utilizadas
 
-O projeto foi desenvolvido utilizando a stack **MERN** e ferramentas
-modernas de build e estilização.
+## 🎨 Front-end
 
-### 🎨 Front-end
+- React 19
+- Vite
+- Tailwind CSS v4
+- React Router DOM
+- Axios
 
--   **React** (v19)
--   **Vite** (Build Tool)
--   **Tailwind CSS** (v4)
--   **React Router DOM**
--   **Axios**
+---
 
-### 🖥 Back-end
+## 🖥 Back-end
 
--   **Node.js**
--   **Express**
--   **MongoDB**
--   **Cookie-Parser**
--   **CORS**
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Cookie Parser
+- CORS
+- JWT Authentication
 
-------------------------------------------------------------------------
+---
 
-## ⚙️ Funcionalidades
+## 🔒 Segurança e Performance
 
-Com base nas rotas atualmente implementadas:
+O projeto também implementa:
 
-### ✅ Implementadas
+- Middleware de autenticação
+- Proteção de rotas
+- Rate Limit para evitar abuso da API
+- Estrutura modularizada
+- Validação de requisições
+- Testes de carga utilizando K6
 
--   [x] Cadastro de Usuários (`/register`)
--   [x] Autenticação / Login (`/login`)
--   [x] Visualização de Acomodações (`/place/:id`)
--   [x] Gerenciamento de Perfil (`/account`)
+---
 
-### 🚧 Em Desenvolvimento
+# ⚙️ Funcionalidades
 
--   [ ] Sistema completo de reservas
--   [ ] Filtros avançados de busca
--   [ ] Upload e gerenciamento de imagens
+## ✅ Implementadas
 
-------------------------------------------------------------------------
+- [x] Cadastro de usuários
+- [x] Login com autenticação JWT
+- [x] Cookies HTTP Only
+- [x] Visualização de acomodações
+- [x] Página individual de acomodação
+- [x] Sistema de perfil
+- [x] Criação de reservas
+- [x] Middleware de autenticação
+- [x] Rate Limiting
+- [x] Testes de carga
 
-## 📦 Como Rodar o Projeto
+---
 
-### 🔹 Pré-requisitos
+## 🚧 Em Desenvolvimento
 
--   Node.js instalado
--   NPM ou Yarn
--   MongoDB rodando (local ou MongoDB Atlas)
+- [ ] Upload de imagens
+- [ ] Sistema avançado de reservas
+- [ ] Busca com filtros
+- [ ] Paginação
+- [ ] Cache
+- [ ] Deploy em cloud
 
-------------------------------------------------------------------------
+---
 
-## 🔧 1. Configuração do Back-end
+# 🧠 Arquitetura do Projeto
 
-Navegue até a pasta do servidor:
+O projeto utiliza arquitetura modular baseada em domínio:
 
-``` bash
+```text
+Domain Driven Structure
+
+domains/
+ ├── users/
+ ├── places/
+ └── bookings/
+```
+
+Cada domínio possui:
+
+- Model
+- Routes
+- Regras de negócio isoladas
+
+Isso facilita:
+
+- manutenção
+- escalabilidade
+- separação de responsabilidades
+
+---
+
+# 📦 Como Rodar o Projeto
+
+# 🔹 Pré-requisitos
+
+Antes de iniciar:
+
+- Node.js instalado
+- MongoDB local ou Atlas
+- Git instalado
+
+---
+
+# 🔧 Configuração do Back-end
+
+Entre na pasta do servidor:
+
+```bash
 cd back-end
 npm install
 ```
 
-Crie um arquivo `.env` dentro da pasta `back-end` com as variáveis
-necessárias:
+Crie um arquivo `.env`:
 
-``` env
+```env
 PORT=4000
-MONGO_URL=sua_string_de_conexao
+
+MONGO_URL=sua_conexao_mongodb
+
 JWT_SECRET=sua_chave_secreta
 ```
 
-Para iniciar o servidor:
+Inicie o servidor:
 
-``` bash
+```bash
 npm start
-# ou
+```
+
+ou
+
+```bash
 node index.js
 ```
 
-O servidor rodará na porta definida no `.env` (padrão: 4000).
+Servidor rodando:
 
-------------------------------------------------------------------------
+```text
+http://localhost:4000
+```
 
-## 💻 2. Configuração do Front-end
+---
 
-Em outro terminal, navegue até a pasta do cliente:
+# 💻 Configuração do Front-end
 
-``` bash
+Entre na pasta do front-end:
+
+```bash
 cd front-end
 npm install
 ```
 
-Crie um arquivo `.env` dentro da pasta `front-end`:
+Crie um `.env`:
 
-``` env
+```env
 VITE_AXIOS_BASE_URL=http://localhost:4000
 ```
 
-Para iniciar o front-end:
+Inicie:
 
-``` bash
+```bash
 npm run dev
 ```
 
-------------------------------------------------------------------------
+Aplicação:
 
-## 🏗 Estrutura Geral
+```text
+http://localhost:5173
+```
+
+---
+
+# 🧪 Testes de Carga
+
+O projeto possui testes de carga utilizando **K6**.
+
+Objetivos dos testes:
+
+- Simular múltiplos usuários
+- Verificar estabilidade da API
+- Avaliar performance
+- Testar Rate Limit
+- Identificar gargalos
+
+Exemplo de execução:
+
+```bash
+k6 run tests/bookings.js
+```
+
+---
+
+# 🔒 Middleware de Rate Limit
+
+Foi implementado middleware de proteção contra abuso de requisições.
+
+Exemplo:
+
+- Proteção contra spam
+- Redução de ataques de força bruta
+- Controle de requisições excessivas
+
+---
+
+# 🗂 Estrutura do Projeto
 
 ```text
 LittleBNB/
@@ -139,101 +249,96 @@ LittleBNB/
 │   ├── config/
 │   │   └── db.js
 │   │
+│   ├── middlewares/
+│   │   ├── auth.js
+│   │   └── rateLimit.js
+│   │
+│   ├── tests/
+│   │   ├── bookings.js
+│   │   └── places.js
+│   │
 │   ├── domains/
 │   │   ├── bookings/
-│   │   │   ├── model.js
-│   │   │   └── routes.js
-│   │   │
 │   │   ├── places/
-│   │   │   ├── model.js
-│   │   │   └── routes.js
-│   │   │
 │   │   └── users/
-│   │       ├── model.js
-│   │       └── routes.js
 │   │
 │   ├── routes/
 │   │   └── index.js
 │   │
 │   ├── utils/
 │   ├── tmp/
-│   ├── .env
-│   ├── index.js
 │   ├── server.js
-│   ├── package.json
-│   └── package-lock.json
+│   ├── index.js
+│   └── package.json
 │
 ├── front-end/
 │   ├── src/
 │   │   ├── assets/
-│   │   │
 │   │   ├── components/
-│   │   │   ├── AccBookings.jsx
-│   │   │   ├── AccPlaces.jsx
-│   │   │   ├── AccProfile.jsx
-│   │   │   ├── Booking.jsx
-│   │   │   ├── Header.jsx
-│   │   │   ├── Item.jsx
-│   │   │   ├── NewPlace.jsx
-│   │   │   ├── Perk.jsx
-│   │   │   ├── Perks.jsx
-│   │   │   └── PhotoUploader.jsx
-│   │   │
 │   │   ├── contexts/
-│   │   │   └── UserContext.jsx
-│   │   │
 │   │   ├── pages/
-│   │   │   ├── Account.jsx
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Place.jsx
-│   │   │   └── Register.jsx
-│   │   │
 │   │   ├── App.jsx
-│   │   ├── index.css
 │   │   └── main.jsx
 │   │
-│   ├── .env
-│   ├── eslint.config.js
-│   ├── index.html
 │   ├── package.json
-│   ├── package-lock.json
-│   ├── tailwind.config.js
-│   ├── vite.config.js
-│   └── .gitignore
+│   └── vite.config.js
 │
 └── README.md
 ```
 
+---
 
+# 📈 Objetivos Técnicos do Projeto
 
+Este projeto foi criado para aprofundar conhecimentos em:
 
-------------------------------------------------------------------------
+- APIs REST
+- Arquitetura Full-Stack
+- MongoDB
+- Autenticação JWT
+- Middlewares
+- Segurança de APIs
+- Testes de carga
+- Organização escalável de código
 
-## 📌 Objetivo do Projeto
+---
 
-Este projeto foi desenvolvido com foco em:
+# 🛠 Possíveis Melhorias Futuras
 
--   Aprendizado de arquitetura Full-Stack
--   Autenticação com cookies/JWT
--   Integração Front-end ↔ Back-end
--   Estruturação profissional de projeto
+- Docker
+- CI/CD
+- Redis Cache
+- Upload em Cloudinary
+- Logs centralizados
+- Testes automatizados
+- WebSockets
+- Kubernetes
+- Microsserviços
 
-------------------------------------------------------------------------
+---
 
-## 🤝 Contribuição
+# 🤝 Contribuição
 
-Como o projeto está em fase de aprendizado e evolução, sugestões são
-bem-vindas.
+Sugestões e melhorias são bem-vindas.
 
-Sinta-se à vontade para:
+Você pode:
 
--   Abrir uma issue
--   Enviar um pull request
--   Sugerir melhorias de arquitetura
+- Abrir Issues
+- Criar Pull Requests
+- Reportar bugs
+- Sugerir melhorias
 
-------------------------------------------------------------------------
+---
 
-## 👨‍💻 Autor
+# 👨‍💻 Autor
 
 Desenvolvido por **Diogo dos Reis Lago**
+
+- LinkedIn: SEU_LINK
+- GitHub: SEU_GITHUB
+
+---
+
+# 📄 Licença
+
+Este projeto está sob a licença MIT.

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NewPlace from "./NewPlace";
 import axios from "axios";
 
@@ -12,20 +11,46 @@ const AccPlaces = () => {
 
   useEffect(() => {
     const axiosGet = async () => {
-      const { data } = await axios.get("/places/owner");
-      setPlaces(data);
+      try {
+        const { data } = await axios.get("/places/owner");
+        setPlaces(data);
+      } catch (error) {
+        console.error("Erro ao buscar hospedagens:", error);
+      }
     };
 
     axiosGet();
   }, [action]);
 
+  // Função para deletar o lugar
+  const handleDeletePlace = async (e, id) => {
+    e.preventDefault(); // Impede o clique de navegar para a tela de edição
+    e.stopPropagation();
+
+    const confirmDelete = window.confirm(
+      "Você tem certeza que deseja excluir essa hospedagem? Todas as reservas associadas a ela serão canceladas."
+    );
+
+    if (confirmDelete) {
+      try {
+        await axios.delete(`/places/${id}`);
+        setPlaces((prevPlaces) =>
+          prevPlaces.filter((place) => place._id !== id)
+        );
+      } catch (error) {
+        console.error("Erro ao deletar hospedagem:", error);
+        alert("Ocorreu um erro ao excluir a hospedagem.");
+      }
+    }
+  };
+
   return (
     <div className="flex w-full max-w-7xl flex-col items-center">
       {action !== "new" ? (
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex w-full flex-col items-center gap-8">
           <Link
             to="/account/places/new"
-            className="hover:bg-primary-500 bg-primary-400 flex min-w-44 cursor-pointer gap-2 rounded-full px-4 py-2 text-white transition"
+            className="bg-primary-400 hover:bg-primary-500 flex min-w-44 cursor-pointer gap-2 rounded-full px-4 py-2 text-white transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -47,9 +72,18 @@ const AccPlaces = () => {
           {places.map((place) => (
             <Link
               to={`/account/places/new/${place._id}`}
-              className="flex items-center gap-6 rounded-2xl bg-gray-100 p-6"
+              className="relative flex w-full max-w-4xl items-center gap-6 rounded-2xl bg-gray-100 p-6"
               key={place._id}
             >
+              <button
+                onClick={(e) => handleDeletePlace(e, place._id)}
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 font-bold text-white transition hover:bg-red-600"
+                title="Excluir hospedagem"
+                type="button"
+              >
+                X
+              </button>
+
               <img
                 className="aspect-square max-w-56 rounded-2xl object-center"
                 src={`${baseUrl}/tmp/${place.photos[0]}`}

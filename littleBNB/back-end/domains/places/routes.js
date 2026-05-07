@@ -6,6 +6,7 @@ import { downloadImage } from "../../utils/imageDownloader.js";
 import { __dirname } from "../../server.js";
 import multer from "multer"; // [Importe o multer]
 import fs from "fs"; // [Importe o fs para renomear arquivos]
+import Booking from "../bookings/model.js";
 
 const router = Router();
 const uploadMiddleware = multer({ dest: "tmp/" }); // [Configura a pasta de destino]
@@ -184,11 +185,36 @@ router.post("/upload", uploadMiddleware.array("photos", 10), (req, res) => {
     fs.renameSync(path, newPath);
     
     // Adiciona apenas o nome do arquivo para retornar ao front
-    // Removemos o "tmp/" ou "tmp\" do caminho para salvar limpo
     uploadedFiles.push(newPath.replace("tmp/", "").replace("tmp\\", "")); 
   }
   
   res.json(uploadedFiles);
+});
+router.delete("/:id", async (req, res) => {
+  connectDb();
+  const { id } = req.params;
+
+  try {
+    const userData = await JWTVerify(req);
+
+    const placeDoc = await Place.findById(id);
+    if (!placeDoc) {
+      return res.status(404).json({ error: "Hospedagem não encontrada" });
+    }
+
+    if (placeDoc.owner.toString() !== userData._id.toString()) {
+      return res.status(403).json({ error: "Você não tem permissão para excluir esta hospedagem" });
+    }
+
+    await Booking.deleteMany({ place: id });
+    await Place.findByIdAndDelete(id);
+
+    res.status(200).json({ message: "Hospedagem e reservas excluídas com sucesso!" });
+
+  } catch (err) {
+    console.error("Erro no delete de places:", err);
+    res.status(500).json({ error: "Erro no servidor ao tentar excluir." });
+  }
 });
 
 export default router;

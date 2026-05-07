@@ -1,14 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Booking = ({ booking, place = false }) => {
+// Adicionamos a prop "onDelete"
+const Booking = ({ booking, place = false, onDelete }) => {
   const baseUrl = import.meta.env.VITE_AXIOS_BASE_URL;
+
   return (
     <Link
       to={`/place/${booking.place._id}`}
-      className={`flex items-center gap-6 rounded-2xl bg-gray-100 p-6 ${place ? "cursor-auto" : ""}`}
+      // Classe relative para posicionar o botão X
+      className={`relative flex items-center gap-6 rounded-2xl bg-gray-100 p-6 ${
+        place ? "cursor-auto" : ""
+      }`}
       key={booking.place._id}
     >
+      {/* BOTÃO X PARA CANCELAR RESERVA */}
+      {!place && onDelete && (
+        <button
+          onClick={(e) => {
+            e.preventDefault(); // Impede o Link de navegar
+            onDelete(booking._id);
+          }}
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 font-bold text-white transition hover:bg-red-600"
+          title="Cancelar reserva"
+        >
+          X
+        </button>
+      )}
+
       {place ? (
         ""
       ) : (
@@ -32,13 +51,13 @@ const Booking = ({ booking, place = false }) => {
           <p>
             <span className="font-semibold">Checkin:</span>{" "}
             {new Date(booking.checkin + "GMT-03:00").toLocaleDateString(
-              "pt-BR",
+              "pt-BR"
             )}
           </p>
           <p>
             <span className="font-semibold">Checkout:</span>{" "}
             {new Date(booking.checkout + "GMT-03:00").toLocaleDateString(
-              "pt-BR",
+              "pt-BR"
             )}
           </p>
           <p>
