@@ -334,8 +334,8 @@ Você pode:
 
 Desenvolvido por **Diogo dos Reis Lago**
 
-- LinkedIn: SEU_LINK
-- GitHub: SEU_GITHUB
+- LinkedIn:https://www.linkedin.com/in/diogo-dos-reis-lago-68a944209/
+- GitHub:https://github.com/LazuliOO2/
 
 ---
 
