@@ -1,0 +1,258 @@
+Fase 1 - Estrutura do Projeto
+
+Peça ao Codex apenas:
+
+Criar projeto Laravel + Inertia + Vue.
+Configurar Tailwind.
+Configurar PostgreSQL.
+Criar estrutura inicial de pastas.
+Não implementar regras de negócio.
+
+Revise:
+
+composer.json
+package.json
+.env.example
+estrutura de diretórios
+
+Objetivo: garantir que o projeto sobe localmente.
+
+Fase 2 - Modelagem
+
+Peça:
+
+Criar migrations, models e relacionamentos sem criar telas.
+
+Entidades:
+
+tickets
+id
+title
+description
+priority
+status
+assigned_to
+opened_at
+created_at
+updated_at
+agents
+id
+name
+active
+created_at
+updated_at
+
+Já deixe preparado:
+
+index(status)
+index(priority)
+index(assigned_to)
+
+Isso demonstra preocupação com performance.
+
+Revise:
+
+migrations
+constraints
+foreign keys
+Fase 3 - Seeders
+
+Peça:
+
+Criar seeders com 3 responsáveis.
+
+Exemplo:
+
+João
+Maria
+Carlos
+
+Assim atende o requisito 3.x.
+
+Fase 4 - Camada de Negócio
+
+Aqui é onde você ganha pontos.
+
+Peça ao Codex:
+
+Criar Service Layer para regras de negócio.
+
+Exemplo:
+
+app/Services/TicketAssignmentService.php
+
+Responsável por:
+
+assignAutomatically()
+
+Regra:
+
+Escolher agente ativo
+com menor quantidade
+de chamados abertos.
+
+Evite colocar essa lógica no Controller.
+
+Isso mostra separação de responsabilidades.
+
+Fase 5 - Segurança
+
+Aqui você quer brilhar.
+
+Mesmo que o desafio não peça autenticação.
+
+Validação
+
+Criar Form Requests:
+
+StoreTicketRequest
+UpdateTicketRequest
+
+Exemplo:
+
+'title' => ['required','string','max:255']
+
+Nunca validar dentro do controller.
+
+Mass Assignment
+
+Models:
+
+protected $fillable = [...]
+
+ou
+
+protected $guarded = [];
+
+de forma consciente.
+
+Sanitização
+
+Remover:
+
+<script>
+
+da descrição.
+
+Pode usar:
+
+strip_tags()
+
+ou uma biblioteca apropriada.
+
+Rate Limiting
+
+Mesmo sendo simples:
+
+ThrottleRequests
+
+na criação de chamados.
+
+Mostra preocupação com abuso.
+
+CSRF
+
+Garantir proteção padrão Laravel.
+
+Documentar no README.
+
+SQL Injection
+
+Usar apenas:
+
+Eloquent
+
+ou
+
+Query Builder
+
+Nunca SQL concatenado.
+
+Logs
+
+Criar logs para:
+
+Chamado criado
+Chamado atualizado
+Responsável alterado
+
+Utilizando:
+
+Log::info()
+Fase 6 - API
+
+Mesmo que ninguém peça.
+
+Criar:
+
+/api/tickets
+/api/agents
+
+com Resources.
+
+Exemplo:
+
+TicketResource
+
+Isso mostra visão de produto.
+
+Fase 7 - Frontend
+
+Peça ao Codex em partes:
+
+Tela de Listagem
+busca
+filtro por status
+filtro por prioridade
+Tela de Cadastro
+formulário
+atribuição manual
+atribuição automática
+Tela de Detalhes
+histórico
+informações completas
+Fase 8 - Testes
+
+Aqui muitos candidatos falham.
+
+Peça:
+
+Criar testes Feature e Unit.
+
+Unit
+TicketAssignmentServiceTest
+
+Validar:
+
+Menor carga recebe chamado.
+Feature
+CreateTicketTest
+UpdateTicketTest
+ListTicketsTest
+
+Se tiver 5 a 10 testes passando já passa muita confiança.
+
+Fase 9 - README nível pleno
+
+Explique:
+
+Arquitetura
+Controller
+→ Service
+→ Model
+Decisões
+Por que Laravel
+Por que Inertia
+Por que PostgreSQL
+Segurança
+Validação
+CSRF
+Rate limiting
+Sanitização
+Logs
+Escalabilidade futura
+Autenticação
+Permissões
+Notificações
+Histórico
+SLA
